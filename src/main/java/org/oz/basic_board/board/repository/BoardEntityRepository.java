@@ -11,10 +11,12 @@ import java.util.Optional;
 
 public interface BoardEntityRepository extends JpaRepository<BoardEntity,Long>, BoardEntitySearch {
 
-    @EntityGraph(attributePaths = {"attachFiles"})
+//    @EntityGraph(attributePaths = {"attachFiles"})
     @Query("""
     SELECT b FROM BoardEntity b
+    JOIN FETCH b.attachFiles af
     WHERE b.bno = :bno
+    ORDER BY af.ord ASC
 """)
     Optional<BoardEntity> getBoard(@Param("bno") Long bno);
 

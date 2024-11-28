@@ -2,6 +2,7 @@ package org.oz.basic_board.board.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.oz.basic_board.common.domain.AttachFile;
 import org.oz.basic_board.common.domain.BasicEntity;
 
@@ -28,8 +29,7 @@ public class BoardEntity extends BasicEntity {
     @Builder.Default
     @CollectionTable(
             name = "tbl_board_files",
-            joinColumns = @JoinColumn(name = "bno")
-    )
+            joinColumns = @JoinColumn(name = "bno"))
     private Set<AttachFile> attachFiles = new HashSet<>();
 
     public void changeTitle(String title) {this.title = title;}

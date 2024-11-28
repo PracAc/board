@@ -17,6 +17,7 @@ public class BoardModifyDTO {
     private String title;
     private String content;
 
-    private List<MultipartFile> Files;
+    private List<MultipartFile> files;
     private List<String> attachFileNames;
+    private List<String> deleteFileNames;
 }
