@@ -33,7 +33,7 @@ public class BoardController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Long> addBoard(BoardAddDTO boardAddDTO, @RequestPart(required = false) MultipartFile[] files) {
+    public ResponseEntity<Long> postBoard(BoardAddDTO boardAddDTO, @RequestPart(required = false) MultipartFile[] files) {
 
         // nginx 사용시 업로드처리하며 받아올 UUID로 생성된 이름 임의로 생성
         List<String> fileNames = new ArrayList<>();
@@ -46,11 +46,12 @@ public class BoardController {
 
         boardAddDTO.setUploadFileNames(fileNames);
 
-        return ResponseEntity.ok().body(boardService.postAdd(boardAddDTO));
+        return ResponseEntity.ok().body(boardService.addBoard(boardAddDTO).getAsLong());
     }
 
     @PutMapping("/edit/{bno}")
-    public ResponseEntity<Long> putBoard(@PathVariable("bno") Long bno, BoardModifyDTO boardModifyDTO, @RequestPart(required = false) MultipartFile[] files) {
+    public ResponseEntity<Long> putBoard(@PathVariable("bno") Long bno, BoardModifyDTO boardModifyDTO,
+                                         @RequestPart(required = false) MultipartFile[] files) {
 
         log.info("---------------------------EDIT ----------------------------------------");
         // nginx 사용시 업로드처리하며 받아올 UUID로 생성된 이름 임의로 생성
@@ -65,12 +66,12 @@ public class BoardController {
         boardModifyDTO.setBno(bno);
         boardModifyDTO.setAttachFileNames(fileNames);
 
-        return ResponseEntity.ok().body(boardService.putOne(boardModifyDTO));
+        return ResponseEntity.ok().body(boardService.modifyBoard(boardModifyDTO).getAsLong());
     }
 
     @PutMapping("/delete/{bno}")
     public ResponseEntity<Long> deleteBoard(@PathVariable("bno") Long bno) {
-        return ResponseEntity.ok().body(boardService.deleteOne(bno));
+        return ResponseEntity.ok().body(boardService.deleteBoard(bno).getAsLong());
     }
 
 }

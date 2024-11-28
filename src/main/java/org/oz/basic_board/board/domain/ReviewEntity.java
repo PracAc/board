@@ -21,4 +21,6 @@ public class ReviewEntity extends BasicEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BoardEntity board;
+
+    public void changeContent(String content) {this.content = content;}
 }

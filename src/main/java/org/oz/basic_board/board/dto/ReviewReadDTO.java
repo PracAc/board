@@ -8,9 +8,9 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @ToString
-public class ReviewListDTO {
+@Builder
+public class ReviewReadDTO {
     private Long rno;
     private String reviewer;
     private String content;
