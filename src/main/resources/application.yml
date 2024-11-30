@@ -1,11 +1,11 @@
 spring:
   application:
-    name: adminapi
+    name: board
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:13306/boarddb
-    username: boarddbuser
-    password: boarddbuser
+    url: jdbc:mariadb://117.52.20.52:3306/manna
+    username: manna
+    password: manna20@#
 
     hikari:
       minimum-idle: 2

@@ -5,16 +5,19 @@ import lombok.extern.log4j.Log4j2;
 import org.oz.basic_board.board.dto.*;
 import org.oz.basic_board.board.service.BoardService;
 import org.oz.basic_board.common.dto.PageResponseDTO;
-import org.oz.basic_board.utill.CustomFileUtil;
+import org.oz.basic_board.utill.file.CustomFileUtil;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/board")
@@ -38,6 +41,8 @@ public class BoardController {
     @PostMapping("")
     public ResponseEntity<Long> postBoard(BoardAddDTO boardAddDTO) {
 
+        log.info(boardAddDTO);
+
         List<String> uploadFileNames = fileUtil.saveFiles(boardAddDTO.getFiles());
 
         boardAddDTO.setUploadFileNames(uploadFileNames);
@@ -53,20 +58,28 @@ public class BoardController {
         log.info("boardModifyDTO: " + boardModifyDTO);
         List<String> uploadFileNames = fileUtil.saveFiles(boardModifyDTO.getFiles());
 
-        uploadFileNames.forEach(fileName -> boardModifyDTO.getAttachFileNames().add(fileName));
+        if (boardModifyDTO.getAttachFileNames() == null) {
+            boardModifyDTO.setAttachFileNames(new ArrayList<>());
+        }
+        boardModifyDTO.getAttachFileNames().addAll(uploadFileNames);
+
         fileUtil.deleteFiles(boardModifyDTO.getDeleteFileNames());
 
         return ResponseEntity.ok().body(boardService.modifyBoard(boardModifyDTO).getAsLong());
-//        return null;
     }
 
     @GetMapping("/img/{fileName}")
     public ResponseEntity<Resource> getImg(@PathVariable String fileName) {
-        return fileUtil.getFile(fileName);
+        return ResponseEntity.ok().body(fileUtil.getFile(fileName));
     }
 
     @PutMapping("/delete/{bno}")
-    public ResponseEntity<Long> deleteBoard(@PathVariable("bno") Long bno) {
+    public ResponseEntity<Long> deleteBoard(@PathVariable("bno") Long bno,@RequestBody List<String> deleteFileNames) {
+
+        log.info("=================DELETE==================");
+        log.info(deleteFileNames);
+        fileUtil.deleteFiles(deleteFileNames);
+
         return ResponseEntity.ok().body(boardService.deleteBoard(bno).getAsLong());
     }
 

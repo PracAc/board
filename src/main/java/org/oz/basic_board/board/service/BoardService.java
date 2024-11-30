@@ -35,7 +35,7 @@ public class BoardService {
 
     public Optional<BoardReadWithReviewDTO> getReadWithReview(Long bno){
 
-        Optional<BoardEntity> result = boardEntityRepository.getBoard(bno);
+        Optional<BoardEntity> boardEntity = boardEntityRepository.getBoard(bno);
         Optional<List<ReviewEntity>> reviewEntities = reviewEntityRepository.getReviewListByBno(bno);
 
         List<ReviewListDTO> reviewList = reviewEntities
@@ -49,16 +49,16 @@ public class BoardService {
                         .build())
                 .collect(Collectors.toList());
 
-        List<String> fileNames = result.get().getAttachFiles()
+        List<String> fileNames = boardEntity.get().getAttachFiles()
                 .stream()
                 .map(AttachFile::getFileName)
                 .collect(Collectors.toList());
 
         return Optional.of(BoardReadWithReviewDTO.builder()
-                .title(result.get().getTitle())
-                .content(result.get().getContent())
-                .writer(result.get().getWriter())
-                .regDate(result.get().getRegDate())
+                .title(boardEntity.get().getTitle())
+                .content(boardEntity.get().getContent())
+                .writer(boardEntity.get().getWriter())
+                .regDate(boardEntity.get().getRegDate())
                 .attachFileNames(fileNames)
                 .reviewList(reviewList)
                 .build());

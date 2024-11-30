@@ -19,7 +19,7 @@ public class BoardAddDTO {
 
     private Integer btype;
 
-    private List<MultipartFile> Files;
+    private List<MultipartFile> files;
 
     private List<String> uploadFileNames;
 }
